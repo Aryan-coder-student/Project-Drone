@@ -1,1 +1,1 @@
-# AI-Integrated-Retail-Manager
+ 
