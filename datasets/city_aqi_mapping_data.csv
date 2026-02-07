@@ -1,0 +1,27 @@
+City,Latitude,Longitude,AQI_mean,AQI_min,AQI_max,AQI_std,AQI_count,AQI_Bucket,color,category,health_message
+Ahmedabad,23.0262,72.5897,448.2851877741391,48.0,2049.0,310.38104900288977,1433,Severe,#800000,Severe,⚠️ SEVERE - Health emergency
+Aizawl,23.7487,92.728,35.08874886220353,18.0,92.0,20.07186682208805,113,Good,#00FF00,Good,Minimal Impact
+Amaravati,16.5412,80.5154,95.81722393147855,24.0,312.0,55.21940553265487,905,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Amritsar,31.6231,74.8725,120.09139362262553,20.0,912.297992512066,78.41490452294506,1207,Satisfactory,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Bengaluru,12.9716,77.5946,96.64849831398358,20.0,432.3631795804142,44.86374263678081,2009,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Bhopal,23.2599,77.4126,132.58244350498356,37.0,312.0,55.88074050442076,280,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Brajrajnagar,21.8167,83.9167,149.6192327395743,22.0,525.7325833278148,70.57769302594956,795,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Chandigarh,30.7333,76.7794,96.29472008848832,26.0,335.0,56.74866251650676,304,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Chennai,13.0827,80.2707,114.77004293097791,30.0,449.0,51.522541771095895,1975,Satisfactory,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Coimbatore,11.0168,76.9558,73.80072527664036,26.0,120.0,17.92144759024628,384,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Delhi,28.6791,77.0697,259.05105989999674,29.0,716.0,119.48319034483801,2007,Poor,#FF0000,Poor,Breathing discomfort to most people on prolonged exposure
+Ernakulam,9.9816,76.2999,92.00735403729624,55.0,180.0,19.23351399609625,159,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Gurugram,28.465,77.0266,223.53952822033082,38.0,1051.3680681963642,121.23706259153302,1625,Moderate,#FF0000,Poor,Breathing discomfort to most people on prolonged exposure
+Guwahati,26.1445,91.7362,143.33635514847006,25.0,1325.4499845162072,124.41397593777027,502,Satisfactory,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Hyderabad,17.385,78.4867,109.0233071823614,22.0,737.0,51.951592639282396,1983,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Jaipur,26.9124,75.7873,133.3703311649187,43.0,457.0,54.252573154779334,1103,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Jorapokhar,22.4225,85.7607,158.55422360639855,27.0,604.0,79.83475381176147,925,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Kochi,9.9312,76.2673,104.40225282104538,51.0,277.0,34.31137864314776,162,Satisfactory,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Kolkata,22.5726,88.3639,137.69112728837592,26.0,475.0,101.12288213791963,814,Satisfactory,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Lucknow,26.85,80.9499,221.78529502604792,39.0,1037.2010266156951,118.69859169074488,1991,Moderate,#FF0000,Poor,Breathing discomfort to most people on prolonged exposure
+Mumbai,19.0761,72.8777,96.09482846906964,40.0,307.0,37.05946847625907,1516,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Patna,25.5941,85.1376,233.18248498203977,53.0,619.0,117.73256831991544,1663,Moderate,#FF0000,Poor,Breathing discomfort to most people on prolonged exposure
+Shillong,25.734,91.734,62.0526176920147,14.0,1275.1180263907852,113.43167753465013,256,Good,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Talcher,20.9493,85.2335,170.75122701086062,13.0,570.0,101.40314103937459,812,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
+Thiruvananthapuram,8.5241,76.9366,75.1156746276763,21.69871248255144,230.0,28.32566370032542,1098,Satisfactory,#FFFF00,Satisfactory,Minor breathing discomfort to sensitive people
+Visakhapatnam,17.6868,83.2185,116.40155704242098,23.0,387.0,53.903657152437724,1263,Moderate,#FFA500,Moderate,Breathing discomfort to people with lung/heart disease
