@@ -1,6 +1,6 @@
-# Project-Drone — AQI Analysis & Mapping
-
  
+
+# Project-Drone — AQI Analysis & Mapping
 
 ## Overview
 
@@ -66,5 +66,4 @@ jupyter notebook
 Notes:
 - Notebooks expect the `datasets/` directory to be present next to the notebooks.
 - Some visualizations may require an interactive environment (JupyterLab or a browser).
-
 

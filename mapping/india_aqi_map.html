@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_2db9f5f4267297f5a83dc9400bae4663 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+<div style="position: fixed; 
+            top: 10px; left: 50px; width: 400px; height: 90px; 
+            background-color: white; border:2px solid grey; z-index:9999; 
+            font-size:14px; padding: 10px">
+<h3 style="margin:0"> India Air Quality Index (AQI) Map</h3>
+<p style="margin:5px 0; font-size:12px">
+Based on Random Forest ML Model<br>
+Data aggregated at city level
+</p>
+</div>
+    
+<div style="position: fixed; 
+            bottom: 50px; right: 50px; width: 180px; 
+            background-color: white; border:2px solid grey; z-index:9999; 
+            font-size:12px; padding: 10px">
+<h4 style="margin:0 0 10px 0">AQI Legend</h4>
+<div style="margin: 5px 0">
+    <span style="background-color: green; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 0-50 Good</span>
+</div>
+<div style="margin: 5px 0">
+    <span style="background-color: yellow; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 51-100 Satisfactory</span>
+</div>
+<div style="margin: 5px 0">
+    <span style="background-color: orange; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 101-200 Moderate</span>
+</div>
+<div style="margin: 5px 0">
+    <span style="background-color: red; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 201-300 Poor</span>
+</div>
+<div style="margin: 5px 0">
+    <span style="background-color: darkred; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 301-400 Very Poor</span>
+</div>
+<div style="margin: 5px 0">
+    <span style="background-color: maroon; width: 20px; height: 10px; display: inline-block"></span>
+    <span> 401+ Severe</span>
+</div>
+</div>
+    
+<div style="position: fixed; 
+            bottom: 10px; left: 50px; width: 500px; 
+            background-color: #fff3cd; border:2px solid #ffc107; z-index:9999; 
+            font-size:11px; padding: 8px">
+<b> DISCLAIMER:</b> This map displays <b>interpolated AQI values</b> aggregated at city level.
+Individual readings may vary. Do not average Severe with Good categories.
+AQI predictions based on Random Forest ML model (R²=0.91).
+For official health advisories, consult local authorities.
+</div>
+    
+            <div class="folium-map" id="map_2db9f5f4267297f5a83dc9400bae4663" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_2db9f5f4267297f5a83dc9400bae4663 = L.map(
+                "map_2db9f5f4267297f5a83dc9400bae4663",
+                {
+                    center: [22.9734, 78.6569],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+
+            
+
+        
+    
+            var tile_layer_283439466afd383b11f03eb3ddb1e381 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_283439466afd383b11f03eb3ddb1e381.addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+            var circle_marker_b4949e0f2d21a65b0fc359065e9e35b9 = L.circleMarker(
+                [23.0262, 72.5897],
+                {"bubblingMouseEvents": true, "color": "maroon", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "maroon", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.48285187774139, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_9f762c0fd48f944078222e89fbd3baf7 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_84786699d1ec32ad8f6b9932bf7cc6c8 = $(`<div id="html_84786699d1ec32ad8f6b9932bf7cc6c8" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: maroon">Ahmedabad</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: maroon; font-weight: bold">448.3</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: maroon; color: white; padding: 2px 6px; border-radius: 3px">Severe</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>48.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>2049.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>310.4</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1433</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                          SEVERE - Affects healthy people, serious impact on those with existing diseases                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_9f762c0fd48f944078222e89fbd3baf7.setContent(html_84786699d1ec32ad8f6b9932bf7cc6c8);
+            
+        
+
+        circle_marker_b4949e0f2d21a65b0fc359065e9e35b9.bindPopup(popup_9f762c0fd48f944078222e89fbd3baf7)
+        ;
+
+        
+    
+    
+            circle_marker_b4949e0f2d21a65b0fc359065e9e35b9.bindTooltip(
+                `<div>
+                     Ahmedabad: AQI 448 (Severe)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e8d2780c5cad38eb0bcba90609f7bb29 = L.circleMarker(
+                [23.7487, 92.728],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.350887488622035, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_3ab260bdc2361b6f6f9108d0ac31d372 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a6e50fec7304b12491b4417cb5aa5295 = $(`<div id="html_a6e50fec7304b12491b4417cb5aa5295" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: green">Aizawl</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: green; font-weight: bold">35.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: green; color: white; padding: 2px 6px; border-radius: 3px">Good</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>18.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>92.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>20.1</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>113</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minimal Impact - Air quality is satisfactory                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_3ab260bdc2361b6f6f9108d0ac31d372.setContent(html_a6e50fec7304b12491b4417cb5aa5295);
+            
+        
+
+        circle_marker_e8d2780c5cad38eb0bcba90609f7bb29.bindPopup(popup_3ab260bdc2361b6f6f9108d0ac31d372)
+        ;
+
+        
+    
+    
+            circle_marker_e8d2780c5cad38eb0bcba90609f7bb29.bindTooltip(
+                `<div>
+                     Aizawl: AQI 35 (Good)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_09ae25464fe7bf338f1b5f2ecc0e9508 = L.circleMarker(
+                [16.5412, 80.5154],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.958172239314786, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_8ece88ae61f5b38bf7352cd45856984a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8e5e89b405fd2a7a9c7b72b50979547b = $(`<div id="html_8e5e89b405fd2a7a9c7b72b50979547b" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Amaravati</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">95.8</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>24.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>312.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>55.2</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>905</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_8ece88ae61f5b38bf7352cd45856984a.setContent(html_8e5e89b405fd2a7a9c7b72b50979547b);
+            
+        
+
+        circle_marker_09ae25464fe7bf338f1b5f2ecc0e9508.bindPopup(popup_8ece88ae61f5b38bf7352cd45856984a)
+        ;
+
+        
+    
+    
+            circle_marker_09ae25464fe7bf338f1b5f2ecc0e9508.bindTooltip(
+                `<div>
+                     Amaravati: AQI 96 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_07227a60f531fd7fbe801d93432e9d15 = L.circleMarker(
+                [31.6231, 74.8725],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.200913936226256, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_b9224eacc1dbe3766f9ba0daec1d71f0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_83ffba378c12f9e3c3e1ec295c890461 = $(`<div id="html_83ffba378c12f9e3c3e1ec295c890461" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Amritsar</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">120.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>20.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>912.3</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>78.4</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1207</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_b9224eacc1dbe3766f9ba0daec1d71f0.setContent(html_83ffba378c12f9e3c3e1ec295c890461);
+            
+        
+
+        circle_marker_07227a60f531fd7fbe801d93432e9d15.bindPopup(popup_b9224eacc1dbe3766f9ba0daec1d71f0)
+        ;
+
+        
+    
+    
+            circle_marker_07227a60f531fd7fbe801d93432e9d15.bindTooltip(
+                `<div>
+                     Amritsar: AQI 120 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_af5f08a4b8efb6b1402b79d2aac945d8 = L.circleMarker(
+                [12.9716, 77.5946],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.966484983139836, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_a0ba3b2ec73bffb26fe77676f12ab384 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1d0f646674d962704bdd670112bbcd62 = $(`<div id="html_1d0f646674d962704bdd670112bbcd62" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Bengaluru</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">96.6</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>20.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>432.4</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>44.9</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>2009</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_a0ba3b2ec73bffb26fe77676f12ab384.setContent(html_1d0f646674d962704bdd670112bbcd62);
+            
+        
+
+        circle_marker_af5f08a4b8efb6b1402b79d2aac945d8.bindPopup(popup_a0ba3b2ec73bffb26fe77676f12ab384)
+        ;
+
+        
+    
+    
+            circle_marker_af5f08a4b8efb6b1402b79d2aac945d8.bindTooltip(
+                `<div>
+                     Bengaluru: AQI 97 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2340b3e15e8e5ec3dd4831d12926bb60 = L.circleMarker(
+                [23.2599, 77.4126],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.325824435049835, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_c910d910f9c8823c069f50bcca6e0124 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_85f1581fb28986ddfa30392fdc541a65 = $(`<div id="html_85f1581fb28986ddfa30392fdc541a65" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Bhopal</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">132.6</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>37.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>312.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>55.9</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>280</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_c910d910f9c8823c069f50bcca6e0124.setContent(html_85f1581fb28986ddfa30392fdc541a65);
+            
+        
+
+        circle_marker_2340b3e15e8e5ec3dd4831d12926bb60.bindPopup(popup_c910d910f9c8823c069f50bcca6e0124)
+        ;
+
+        
+    
+    
+            circle_marker_2340b3e15e8e5ec3dd4831d12926bb60.bindTooltip(
+                `<div>
+                     Bhopal: AQI 133 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cc4ef927106c21a1f0b1674b6796f0c1 = L.circleMarker(
+                [21.8167, 83.9167],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.496192327395743, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_78944915c02e710caeb246b7535ad31b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4c085bfe25dd537ea7bfa0028d0e9bc5 = $(`<div id="html_4c085bfe25dd537ea7bfa0028d0e9bc5" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Brajrajnagar</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">149.6</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>22.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>525.7</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>70.6</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>795</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_78944915c02e710caeb246b7535ad31b.setContent(html_4c085bfe25dd537ea7bfa0028d0e9bc5);
+            
+        
+
+        circle_marker_cc4ef927106c21a1f0b1674b6796f0c1.bindPopup(popup_78944915c02e710caeb246b7535ad31b)
+        ;
+
+        
+    
+    
+            circle_marker_cc4ef927106c21a1f0b1674b6796f0c1.bindTooltip(
+                `<div>
+                     Brajrajnagar: AQI 150 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a3e60c6b2e6f90d3d2265adfe28f3eba = L.circleMarker(
+                [30.7333, 76.7794],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.962947200884884, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_e1a6fa1dd8f49d42d8ee6a0b830d4cb9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bd2eb79eff53682d8b5bdabdea8db007 = $(`<div id="html_bd2eb79eff53682d8b5bdabdea8db007" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Chandigarh</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">96.3</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>26.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>335.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>56.7</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>304</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_e1a6fa1dd8f49d42d8ee6a0b830d4cb9.setContent(html_bd2eb79eff53682d8b5bdabdea8db007);
+            
+        
+
+        circle_marker_a3e60c6b2e6f90d3d2265adfe28f3eba.bindPopup(popup_e1a6fa1dd8f49d42d8ee6a0b830d4cb9)
+        ;
+
+        
+    
+    
+            circle_marker_a3e60c6b2e6f90d3d2265adfe28f3eba.bindTooltip(
+                `<div>
+                     Chandigarh: AQI 96 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b2dec3b1241d7c914281e8a8121d2f74 = L.circleMarker(
+                [13.0827, 80.2707],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.14770042930978, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_9491cddab9452d618f99cded2aaccfc2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bdead8f6d560fb0f32e70486a71a0d17 = $(`<div id="html_bdead8f6d560fb0f32e70486a71a0d17" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Chennai</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">114.8</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>30.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>449.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>51.5</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1975</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_9491cddab9452d618f99cded2aaccfc2.setContent(html_bdead8f6d560fb0f32e70486a71a0d17);
+            
+        
+
+        circle_marker_b2dec3b1241d7c914281e8a8121d2f74.bindPopup(popup_9491cddab9452d618f99cded2aaccfc2)
+        ;
+
+        
+    
+    
+            circle_marker_b2dec3b1241d7c914281e8a8121d2f74.bindTooltip(
+                `<div>
+                     Chennai: AQI 115 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_eeba83568fa331b07d3bd8ba03a84b90 = L.circleMarker(
+                [11.0168, 76.9558],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.738007252766403, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_a5017fc485662d7d15ae5e712b0b579e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c9144790dece4eeb23705563b4255c88 = $(`<div id="html_c9144790dece4eeb23705563b4255c88" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Coimbatore</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">73.8</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>26.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>120.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>17.9</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>384</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_a5017fc485662d7d15ae5e712b0b579e.setContent(html_c9144790dece4eeb23705563b4255c88);
+            
+        
+
+        circle_marker_eeba83568fa331b07d3bd8ba03a84b90.bindPopup(popup_a5017fc485662d7d15ae5e712b0b579e)
+        ;
+
+        
+    
+    
+            circle_marker_eeba83568fa331b07d3bd8ba03a84b90.bindTooltip(
+                `<div>
+                     Coimbatore: AQI 74 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_00333014dfb0a96c2a09f25baa339cd7 = L.circleMarker(
+                [28.6791, 77.0697],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.590510598999968, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_7b49d7058fbe98cdf6629a3ac0322d89 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_502607b8c7f7f0daf1ed840902e55cc1 = $(`<div id="html_502607b8c7f7f0daf1ed840902e55cc1" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: red">Delhi</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: red; font-weight: bold">259.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: red; color: white; padding: 2px 6px; border-radius: 3px">Poor</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>29.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>716.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>119.5</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>2007</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to most people on prolonged exposure                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_7b49d7058fbe98cdf6629a3ac0322d89.setContent(html_502607b8c7f7f0daf1ed840902e55cc1);
+            
+        
+
+        circle_marker_00333014dfb0a96c2a09f25baa339cd7.bindPopup(popup_7b49d7058fbe98cdf6629a3ac0322d89)
+        ;
+
+        
+    
+    
+            circle_marker_00333014dfb0a96c2a09f25baa339cd7.bindTooltip(
+                `<div>
+                     Delhi: AQI 259 (Poor)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aeed4b32013a802787345619469f0451 = L.circleMarker(
+                [9.9816, 76.2999],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.920073540372963, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_a474f73b5469fc62fae0ee92f08b5df4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ef0b1aac1138aabbd40bb77cfe896c9b = $(`<div id="html_ef0b1aac1138aabbd40bb77cfe896c9b" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Ernakulam</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">92.0</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>55.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>180.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>19.2</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>159</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_a474f73b5469fc62fae0ee92f08b5df4.setContent(html_ef0b1aac1138aabbd40bb77cfe896c9b);
+            
+        
+
+        circle_marker_aeed4b32013a802787345619469f0451.bindPopup(popup_a474f73b5469fc62fae0ee92f08b5df4)
+        ;
+
+        
+    
+    
+            circle_marker_aeed4b32013a802787345619469f0451.bindTooltip(
+                `<div>
+                     Ernakulam: AQI 92 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3f2cf815dc9bef4298a877370aaf235b = L.circleMarker(
+                [28.465, 77.0266],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.235395282203308, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_ec2ee57658912be9107c117c8e2b5438 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_21ad4acca5d71e42514bd1a94ee16e2c = $(`<div id="html_21ad4acca5d71e42514bd1a94ee16e2c" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: red">Gurugram</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: red; font-weight: bold">223.5</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: red; color: white; padding: 2px 6px; border-radius: 3px">Poor</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>38.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>1051.4</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>121.2</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1625</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to most people on prolonged exposure                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_ec2ee57658912be9107c117c8e2b5438.setContent(html_21ad4acca5d71e42514bd1a94ee16e2c);
+            
+        
+
+        circle_marker_3f2cf815dc9bef4298a877370aaf235b.bindPopup(popup_ec2ee57658912be9107c117c8e2b5438)
+        ;
+
+        
+    
+    
+            circle_marker_3f2cf815dc9bef4298a877370aaf235b.bindTooltip(
+                `<div>
+                     Gurugram: AQI 224 (Poor)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6f6aabe51bf6add63221d4d2bf1f847c = L.circleMarker(
+                [26.1445, 91.7362],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.4333635514847, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_3c57ca8bd3502809c08b4eb1f921847a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d405721b7c1e829638a6cf6104215c77 = $(`<div id="html_d405721b7c1e829638a6cf6104215c77" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Guwahati</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">143.3</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>25.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>1325.4</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>124.4</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>502</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_3c57ca8bd3502809c08b4eb1f921847a.setContent(html_d405721b7c1e829638a6cf6104215c77);
+            
+        
+
+        circle_marker_6f6aabe51bf6add63221d4d2bf1f847c.bindPopup(popup_3c57ca8bd3502809c08b4eb1f921847a)
+        ;
+
+        
+    
+    
+            circle_marker_6f6aabe51bf6add63221d4d2bf1f847c.bindTooltip(
+                `<div>
+                     Guwahati: AQI 143 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ebbf0f800f4162ca2f6cc2370ee4730a = L.circleMarker(
+                [17.385, 78.4867],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.090233071823615, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_739dabfd4c369d46ee6e7ef2d46a7699 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_246dca2fa602d86f3b5a178e1e3af9c6 = $(`<div id="html_246dca2fa602d86f3b5a178e1e3af9c6" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Hyderabad</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">109.0</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>22.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>737.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>52.0</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1983</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_739dabfd4c369d46ee6e7ef2d46a7699.setContent(html_246dca2fa602d86f3b5a178e1e3af9c6);
+            
+        
+
+        circle_marker_ebbf0f800f4162ca2f6cc2370ee4730a.bindPopup(popup_739dabfd4c369d46ee6e7ef2d46a7699)
+        ;
+
+        
+    
+    
+            circle_marker_ebbf0f800f4162ca2f6cc2370ee4730a.bindTooltip(
+                `<div>
+                     Hyderabad: AQI 109 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0396b11786b5cf270cfde42da9100383 = L.circleMarker(
+                [26.9124, 75.7873],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.333703311649186, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_027ed48c7f9c640a9f0aeee885632057 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0fffbda0b338168d5653d8297d41862d = $(`<div id="html_0fffbda0b338168d5653d8297d41862d" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Jaipur</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">133.4</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>43.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>457.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>54.3</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1103</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_027ed48c7f9c640a9f0aeee885632057.setContent(html_0fffbda0b338168d5653d8297d41862d);
+            
+        
+
+        circle_marker_0396b11786b5cf270cfde42da9100383.bindPopup(popup_027ed48c7f9c640a9f0aeee885632057)
+        ;
+
+        
+    
+    
+            circle_marker_0396b11786b5cf270cfde42da9100383.bindTooltip(
+                `<div>
+                     Jaipur: AQI 133 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8883947d1aaa2f4ac054cf6bdd5150b2 = L.circleMarker(
+                [22.4225, 85.7607],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.585542236063986, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_f8c0e68a6019f636b818e5590f4be267 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a990bffcc8ef914a10d0009c273a1690 = $(`<div id="html_a990bffcc8ef914a10d0009c273a1690" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Jorapokhar</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">158.6</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>27.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>604.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>79.8</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>925</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_f8c0e68a6019f636b818e5590f4be267.setContent(html_a990bffcc8ef914a10d0009c273a1690);
+            
+        
+
+        circle_marker_8883947d1aaa2f4ac054cf6bdd5150b2.bindPopup(popup_f8c0e68a6019f636b818e5590f4be267)
+        ;
+
+        
+    
+    
+            circle_marker_8883947d1aaa2f4ac054cf6bdd5150b2.bindTooltip(
+                `<div>
+                     Jorapokhar: AQI 159 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_35fe018a0cdedd2e40c2c4c4a0feb6b4 = L.circleMarker(
+                [9.9312, 76.2673],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.044022528210453, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_0c7982cdbb19282305cce77aeaf455ee = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e2a16abafcb97e016d08a53f4f7840db = $(`<div id="html_e2a16abafcb97e016d08a53f4f7840db" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Kochi</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">104.4</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>51.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>277.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>34.3</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>162</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_0c7982cdbb19282305cce77aeaf455ee.setContent(html_e2a16abafcb97e016d08a53f4f7840db);
+            
+        
+
+        circle_marker_35fe018a0cdedd2e40c2c4c4a0feb6b4.bindPopup(popup_0c7982cdbb19282305cce77aeaf455ee)
+        ;
+
+        
+    
+    
+            circle_marker_35fe018a0cdedd2e40c2c4c4a0feb6b4.bindTooltip(
+                `<div>
+                     Kochi: AQI 104 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_516c0f79e1c5207690dd76198bc4931f = L.circleMarker(
+                [22.5726, 88.3639],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.37691127288376, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_c338191354defdd536c8b1a882fd3e7b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_77d536ded9040fb7234d180ca99bf2af = $(`<div id="html_77d536ded9040fb7234d180ca99bf2af" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Kolkata</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">137.7</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>26.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>475.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>101.1</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>814</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_c338191354defdd536c8b1a882fd3e7b.setContent(html_77d536ded9040fb7234d180ca99bf2af);
+            
+        
+
+        circle_marker_516c0f79e1c5207690dd76198bc4931f.bindPopup(popup_c338191354defdd536c8b1a882fd3e7b)
+        ;
+
+        
+    
+    
+            circle_marker_516c0f79e1c5207690dd76198bc4931f.bindTooltip(
+                `<div>
+                     Kolkata: AQI 138 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1bb09d85b591825baee21ee36f2c7d68 = L.circleMarker(
+                [26.85, 80.9499],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.217852950260479, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_088732d27cf1139610566aeff33a7a87 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_da42969b97b1bf9d7bee1c4fd62017b6 = $(`<div id="html_da42969b97b1bf9d7bee1c4fd62017b6" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: red">Lucknow</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: red; font-weight: bold">221.8</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: red; color: white; padding: 2px 6px; border-radius: 3px">Poor</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>39.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>1037.2</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>118.7</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1991</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to most people on prolonged exposure                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_088732d27cf1139610566aeff33a7a87.setContent(html_da42969b97b1bf9d7bee1c4fd62017b6);
+            
+        
+
+        circle_marker_1bb09d85b591825baee21ee36f2c7d68.bindPopup(popup_088732d27cf1139610566aeff33a7a87)
+        ;
+
+        
+    
+    
+            circle_marker_1bb09d85b591825baee21ee36f2c7d68.bindTooltip(
+                `<div>
+                     Lucknow: AQI 222 (Poor)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_20fc9c445266943493e77fde87983f45 = L.circleMarker(
+                [19.0761, 72.8777],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.960948284690696, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_2f62bfff649cbb7185fe9f7798815b06 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e38f846897a86301c6346a6e7fc033e7 = $(`<div id="html_e38f846897a86301c6346a6e7fc033e7" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Mumbai</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">96.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>40.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>307.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>37.1</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1516</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_2f62bfff649cbb7185fe9f7798815b06.setContent(html_e38f846897a86301c6346a6e7fc033e7);
+            
+        
+
+        circle_marker_20fc9c445266943493e77fde87983f45.bindPopup(popup_2f62bfff649cbb7185fe9f7798815b06)
+        ;
+
+        
+    
+    
+            circle_marker_20fc9c445266943493e77fde87983f45.bindTooltip(
+                `<div>
+                     Mumbai: AQI 96 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0ce4bb935e930ec3024582526febbcc7 = L.circleMarker(
+                [25.5941, 85.1376],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.331824849820398, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_3981f912fdc7df1b29c8e705f71c2e3a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f548a5f987a64f3c89f2ad3d7df8baee = $(`<div id="html_f548a5f987a64f3c89f2ad3d7df8baee" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: red">Patna</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: red; font-weight: bold">233.2</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: red; color: white; padding: 2px 6px; border-radius: 3px">Poor</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>53.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>619.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>117.7</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1663</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to most people on prolonged exposure                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_3981f912fdc7df1b29c8e705f71c2e3a.setContent(html_f548a5f987a64f3c89f2ad3d7df8baee);
+            
+        
+
+        circle_marker_0ce4bb935e930ec3024582526febbcc7.bindPopup(popup_3981f912fdc7df1b29c8e705f71c2e3a)
+        ;
+
+        
+    
+    
+            circle_marker_0ce4bb935e930ec3024582526febbcc7.bindTooltip(
+                `<div>
+                     Patna: AQI 233 (Poor)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fed4dee73aad8c063781c2709cf78794 = L.circleMarker(
+                [25.734, 91.734],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.620526176920148, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_570c46aed3eef491157dcf7f0ee02852 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_53abcab9186933ba250c0f096859ff35 = $(`<div id="html_53abcab9186933ba250c0f096859ff35" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Shillong</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">62.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>14.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>1275.1</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>113.4</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>256</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_570c46aed3eef491157dcf7f0ee02852.setContent(html_53abcab9186933ba250c0f096859ff35);
+            
+        
+
+        circle_marker_fed4dee73aad8c063781c2709cf78794.bindPopup(popup_570c46aed3eef491157dcf7f0ee02852)
+        ;
+
+        
+    
+    
+            circle_marker_fed4dee73aad8c063781c2709cf78794.bindTooltip(
+                `<div>
+                     Shillong: AQI 62 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e3244d8e939445a2eda3e14645566a35 = L.circleMarker(
+                [20.9493, 85.2335],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.707512270108605, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_525ffc8f8ef95d7b17e9c488c12b7621 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_776d1540d30d9c1703a2e39226e10618 = $(`<div id="html_776d1540d30d9c1703a2e39226e10618" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Talcher</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">170.8</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>13.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>570.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>101.4</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>812</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_525ffc8f8ef95d7b17e9c488c12b7621.setContent(html_776d1540d30d9c1703a2e39226e10618);
+            
+        
+
+        circle_marker_e3244d8e939445a2eda3e14645566a35.bindPopup(popup_525ffc8f8ef95d7b17e9c488c12b7621)
+        ;
+
+        
+    
+    
+            circle_marker_e3244d8e939445a2eda3e14645566a35.bindTooltip(
+                `<div>
+                     Talcher: AQI 171 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e6366590dc5f0ce5301e1bdeac3abf0b = L.circleMarker(
+                [8.5241, 76.9366],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.751156746276763, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_a1f31b1b231ba265365ec635d5feabaa = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ba2a4caef5cade9decf23d55bfd88b12 = $(`<div id="html_ba2a4caef5cade9decf23d55bfd88b12" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: yellow">Thiruvananthapuram</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: yellow; font-weight: bold">75.1</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: yellow; color: white; padding: 2px 6px; border-radius: 3px">Satisfactory</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>21.7</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>230.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>28.3</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1098</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Minor breathing discomfort to sensitive people                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_a1f31b1b231ba265365ec635d5feabaa.setContent(html_ba2a4caef5cade9decf23d55bfd88b12);
+            
+        
+
+        circle_marker_e6366590dc5f0ce5301e1bdeac3abf0b.bindPopup(popup_a1f31b1b231ba265365ec635d5feabaa)
+        ;
+
+        
+    
+    
+            circle_marker_e6366590dc5f0ce5301e1bdeac3abf0b.bindTooltip(
+                `<div>
+                     Thiruvananthapuram: AQI 75 (Satisfactory)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d7e7bd5363cdb8fde0bd7f02d26c3036 = L.circleMarker(
+                [17.6868, 83.2185],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.16401557042421, "stroke": true, "weight": 2}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+        var popup_bc8621385323203cf6ef1d1d90913f9b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9ace074fe590d115393b84a57aa37185 = $(`<div id="html_9ace074fe590d115393b84a57aa37185" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 250px">             <h4 style="margin: 0 0 10px 0; color: orange">Visakhapatnam</h4>             <table style="width: 100%; font-size: 12px">                 <tr>                     <td><b>Mean AQI:</b></td>                     <td style="color: orange; font-weight: bold">116.4</td>                 </tr>                 <tr>                     <td><b>Category:</b></td>                     <td><span style="background-color: orange; color: white; padding: 2px 6px; border-radius: 3px">Moderate</span></td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td><b>Min AQI:</b></td>                     <td>23.0</td>                 </tr>                 <tr>                     <td><b>Max AQI:</b></td>                     <td>387.0</td>                 </tr>                 <tr>                     <td><b>Std Dev:</b></td>                     <td>53.9</td>                 </tr>                 <tr>                     <td><b>Samples:</b></td>                     <td>1263</td>                 </tr>                 <tr><td colspan="2"><hr style="margin: 5px 0"></td></tr>                 <tr>                     <td colspan="2" style="font-size: 11px; color: #555">                         <b>Health Impact:</b><br>                         Breathing discomfort to people with lung/heart disease                     </td>                 </tr>             </table>             <p style="font-size: 10px; color: #888; margin-top: 5px">                  Interpolated AQI - City-level average             </p>         </div>         </div>`)[0];
+                popup_bc8621385323203cf6ef1d1d90913f9b.setContent(html_9ace074fe590d115393b84a57aa37185);
+            
+        
+
+        circle_marker_d7e7bd5363cdb8fde0bd7f02d26c3036.bindPopup(popup_bc8621385323203cf6ef1d1d90913f9b)
+        ;
+
+        
+    
+    
+            circle_marker_d7e7bd5363cdb8fde0bd7f02d26c3036.bindTooltip(
+                `<div>
+                     Visakhapatnam: AQI 116 (Moderate)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var heat_map_0e724086807f89d56b2d02adb069c96c = L.heatLayer(
+                [[23.0262, 72.5897, 448.2851877741391], [23.7487, 92.728, 35.08874886220353], [16.5412, 80.5154, 95.81722393147855], [31.6231, 74.8725, 120.09139362262553], [12.9716, 77.5946, 96.64849831398358], [23.2599, 77.4126, 132.58244350498356], [21.8167, 83.9167, 149.6192327395743], [30.7333, 76.7794, 96.29472008848832], [13.0827, 80.2707, 114.77004293097791], [11.0168, 76.9558, 73.80072527664036], [28.6791, 77.0697, 259.05105989999674], [9.9816, 76.2999, 92.00735403729624], [28.465, 77.0266, 223.53952822033082], [26.1445, 91.7362, 143.33635514847006], [17.385, 78.4867, 109.0233071823614], [26.9124, 75.7873, 133.3703311649187], [22.4225, 85.7607, 158.55422360639855], [9.9312, 76.2673, 104.40225282104538], [22.5726, 88.3639, 137.69112728837592], [26.85, 80.9499, 221.78529502604792], [19.0761, 72.8777, 96.09482846906964], [25.5941, 85.1376, 233.18248498203977], [25.734, 91.734, 62.0526176920147], [20.9493, 85.2335, 170.75122701086062], [8.5241, 76.9366, 75.1156746276763], [17.6868, 83.2185, 116.40155704242098]],
+                {
+  "minOpacity": 0.3,
+  "maxZoom": 6,
+  "radius": 30,
+  "blur": 20,
+  "gradient": {
+  0.0: "green",
+  0.2: "yellow",
+  0.4: "orange",
+  0.6: "red",
+  0.8: "darkred",
+  1.0: "maroon",
+},
+}
+            );
+        
+    
+            heat_map_0e724086807f89d56b2d02adb069c96c.addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+            var marker_7a051b2b5494aab5f5b6956c92cb278b = L.marker(
+                [23.0262, 72.5897],
+                {
+}
+            ).addTo(map_2db9f5f4267297f5a83dc9400bae4663);
+        
+    
+            var icon_cebb36834018708968702d6d56119a6f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "black",
+  "iconColor": "white",
+  "icon": "warning-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1e5ec466a7bc425bf37d0dcd46e232a1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c177c65b182d0c99643ac0d20d36b875 = $(`<div id="html_c177c65b182d0c99643ac0d20d36b875" style="width: 100.0%; height: 100.0%;"> SEVERE AIR QUALITY<br>Ahmedabad: AQI 448</div>`)[0];
+                popup_1e5ec466a7bc425bf37d0dcd46e232a1.setContent(html_c177c65b182d0c99643ac0d20d36b875);
+            
+        
+
+        marker_7a051b2b5494aab5f5b6956c92cb278b.bindPopup(popup_1e5ec466a7bc425bf37d0dcd46e232a1)
+        ;
+
+        
+    
+    
+                marker_7a051b2b5494aab5f5b6956c92cb278b.setIcon(icon_cebb36834018708968702d6d56119a6f);
+            
+</script>
+</html>
